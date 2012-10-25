@@ -1,4 +1,6 @@
 *~
 *.out
 *.swp
-in
+*in
+*out
+saida
