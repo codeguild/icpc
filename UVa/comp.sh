@@ -1,0 +1,1 @@
+/home/caio/Documentos/ICPC/comp.sh
