@@ -1,1 +1,1 @@
-/home/caio/Documentos/ICPC/comp.sh
+../comp.sh
