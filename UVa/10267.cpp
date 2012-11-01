@@ -1,18 +1,24 @@
 #include<stdio.h>
 #include<string>
 #include<iostream>
+#include<math.h>
 using namespace std;
 
 char mesa[260][260];
 
+bool dentro(int X, int Y, int x, int y)
+{
+	return x <= X && x > 0 && y <= Y && y > 0;
+}
+
 void altera(int X, int Y, int x, int y, char C, char ant){
-	if(x <= X && x > 0 && y <= Y && y > 0 && mesa[x][y] == ant){
-		mesa[x][y] = C;
-		altera(X, Y, x+1, y, C, ant);
-		altera(X, Y, x-1, y, C, ant);
-		altera(X, Y, x, y+1, C, ant);
-		altera(X, Y, x, y-1, C, ant);
-	}
+	mesa[x][y] = C;
+	//if(x <= X && x > 0 && y <= Y && y > 0 && mesa[x][y] == ant){
+	if (dentro(X, Y, x+1, y) && mesa[x+1][y] == ant) altera(X, Y, x+1, y, C, ant);
+	if (dentro(X, Y, x-1, y) && mesa[x-1][y] == ant) altera(X, Y, x-1, y, C, ant);
+	if (dentro(X, Y, x, y+1) && mesa[x][y+1] == ant) altera(X, Y, x, y+1, C, ant);
+	if (dentro(X, Y, x, y-1) && mesa[x][y-1] == ant) altera(X, Y, x, y-1, C, ant);
+	//}
 }
 
 void limpa(int X, int Y){
@@ -32,8 +38,6 @@ void swap(int * a, int * b)
 
 int main()
 {
-	
-	char n;
 	while(true)
 	{
 		int Y;
@@ -73,6 +77,12 @@ int main()
 				cin>>y1;
 				cin>>y2;
 				cin>>C;
+				if(y1 > y2)
+				{
+					int tmp = y1;
+					y1 = y2;
+					y2 = tmp;
+				}
 				for(int i = y1; i<=y2; i++){
 					mesa[x][i] = C;
 				}
@@ -82,6 +92,12 @@ int main()
 				cin>>x2;
 				cin>>y;
 				cin>>C;
+				if(x1 > x2)
+				{
+					int tmp = x1;
+					x1 = x2;
+					x2 = tmp;
+				}
 				for(int i = x1; i<=x2; i++){
 					mesa[i][y] = C;
 				}
@@ -92,6 +108,18 @@ int main()
 				cin>>y1;
 				cin>>y2;
 				cin>>C;
+				if(x1 > x2)
+				{
+					int tmp = x1;
+					x1 = x2;
+					x2 = tmp;
+				}
+				if(y1 > y2)
+				{
+					int tmp = y1;
+					y1 = y2;
+					y2 = tmp;
+				}
 				for(int i = x1; i <= x2; i++){
 					for(int j = y1; j <= y2; j++){
 						mesa[i][j] = C;
