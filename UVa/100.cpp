@@ -1,4 +1,16 @@
 #include <stdio.h>
+#include <iostream>
+
+using namespace std;
+
+#ifdef MACRO 
+	#define TRACE(x...) x
+#else
+	#define TRACE(x...)
+#endif
+
+#define PRINT(x...) TRACE(printf(x))
+#define WATCH(x) TRACE(cout << "\n# " << #x" = " << x << " #\n")
 
 int f3n1(long x)
 {
@@ -21,6 +33,7 @@ int main()
 	{
 		int max = 0;
 		printf("%d %d ", i, j);
+		WATCH(i);
 		if(i > j){
 			int temp = j;
 			j = i;
