@@ -10,8 +10,8 @@ if [ $? != 0 ]; then
 	echo '### NAO COMPILOU ###';
 else 
 	echo '### COMPILOU ###';
-	#./$1 < $1.in | tee $1.out
-	./$1 < $1.in
+	./$1 < $1.in | tee $1.out
+	#./$1 < $1.in
 	if [ $? != 0 ]; then
 		echo '### RUNTIME ERROR ###';
 	else
