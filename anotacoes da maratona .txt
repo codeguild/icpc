@@ -1,0 +1,15 @@
+anotações da maratona
+
+
+fazer script de compilação e execução com:
+
+vimdiff
+
+
+quango for user long usar unsigned long int quando for positivo e long int quando for negativo e positivo
+
+
+para que o arquivo comp.sh  execute com o comando ./comp.sh <numero do problema> precisa ser dado o comando chmod 777 comp.sh no terminal
+
+
+para compilar com o script   sh comp.sh <nome do arquivo do problema>
