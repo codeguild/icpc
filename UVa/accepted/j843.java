@@ -1,4 +1,5 @@
 import java.util.*;
+//import java.utils.Scanner;
 
 public class j843
 {
@@ -12,9 +13,13 @@ public class j843
 			words[i] = sc.next();
 		}
 		sc.nextLine();
+		int i = 0;
 		while(sc.hasNext())
 		{
+			if(i!= 0)
+				System.out.println();
 			testar(words, sc.nextLine());
+			i++;
 		}
 	}
 	public static String f(String frase, char [] hash)
@@ -33,7 +38,7 @@ public class j843
 	{
 		if(i >= frase.length)
 		{
-			System.out.println(f(original, hash));
+			System.out.print(f(original, hash));
 			return true;
 		}
 		for(int j = 0; j < words.length; j++)
@@ -41,6 +46,7 @@ public class j843
 			if(words[j].length() == frase[i].length())
 			{
 				char [] hashcp = hash.clone();
+				char [] rehashcp = rehash.clone();
 				boolean falhou = false;
 				for(int k = 0; k < frase[i].length(); k++)
 				{
@@ -61,6 +67,7 @@ public class j843
 						return true;
 				}
 				hash = hashcp;
+				rehash = rehashcp;
 			}
 		}
 		return false;
@@ -72,7 +79,7 @@ public class j843
 		char [] hash = new char[27];
 		char [] rehash = new char[27];
 		if(!rec(frase, words, sfrase, hash, rehash, 0))
-			System.out.println(frase.replaceAll("[a-z]", "*"));
+			System.out.print(frase.replaceAll("[a-z]", "*"));
 		
 	}
 }
