@@ -24,8 +24,8 @@ using namespace std;
 #define PRINT(x...) TRACE(printf(x))
 #define WATCH(x) TRACE(cout << #x" = " << x << "\n")
 
-#define MAXV 10
-#define MAXDEGREE 10
+#define MAXV 100001
+#define MAXDEGREE 1001
 
 typedef struct {
 	int v;
@@ -38,6 +38,17 @@ typedef struct {
 	int nvertices;
 	int nedges;
 } graph;
+
+void print_graph(graph *g)
+{
+	int i,j;
+	for (i=1; i<=g->nvertices; i++) {
+		printf("%d: ",i);
+		for (j=0; j<g->degree[i]; j++)
+			printf(" %d",g->edges[i][j].v);
+		printf("\n");
+	}
+}
 
 void initialize_graph(graph *g)
 {
@@ -59,7 +70,17 @@ void insert_edge(graph *g, int x, int y, bool directed)
 		g->nedges++;
 }
 
- 
+void trim2(string& str)
+{
+  string::size_type pos = str.find_last_not_of(' ');
+  if(pos != string::npos) {
+    str.erase(pos + 1);
+    pos = str.find_first_not_of(' ');
+    if(pos != string::npos) str.erase(0, pos);
+  }
+  else str.erase(str.begin(), str.end());
+}
+
 
 void splitg(string s, graph *g, map<string, int> *hash)
 {
@@ -74,22 +95,23 @@ void splitg(string s, graph *g, map<string, int> *hash)
 	{
 		getline( ss1, x1, ',' );
 		getline( ss1, x2, ',' );
-		std::remove(x1.begin(), x1.end(), ' ');
-		string pes = x1 + string(",") + x2;
+		trim2(x1);
+		string pes = x1.substr(s.find_first_not_of(' ')) + string(",") + x2;
 		map<string,int>::iterator it = hash->find(pes);
 		if(it == hash->end())
-			hash->insert(pair<string,int>(pes, hash->size()));
+			hash->insert(pair<string,int>(pes, hash->size()+1));
 		it = hash->find(pes);
 		for(set<int>::iterator it2 = artigo.begin(); it2 != artigo.end(); it2++)
 		{
 			insert_edge(g, it->second, *it2, false);
 		}
+		artigo.insert(it->second);
 	}
 }
 
 int parent[MAXV];
 
-void dijkstra(graph *g, int start)
+/*int * dijkstra(graph *g, int start)
 {
 	int i,j;
 	bool intree[MAXV];
@@ -102,10 +124,10 @@ void dijkstra(graph *g, int start)
 		intree[i] = false;
 		distance[i] = INT_MAX;
 		parent[i] = -1;
-		}
-		distance[start] = 0;
-		v = start;
-		while (intree[v] == false) {
+	}
+	distance[start] = 0;
+	v = start;
+	while (intree[v] == false) {
 		intree[v] = true;
 		for (i=0; i<g->degree[v]; i++) {
 			w = g->edges[v][i].v;
@@ -123,6 +145,19 @@ void dijkstra(graph *g, int start)
 				v = i;
 			}
 	}
+	return distance;
+}*/
+
+int dist[100];
+
+void rec(graph *g, int pos, int distancia)
+{
+	if (dist[pos] > distancia)
+	{
+		dist[pos] = distancia;
+		for (int j = 0; j < g->degree[pos]; j++)
+			rec(g, g->edges[pos][j].v, distancia+1);
+	}
 }
 
 int main()
@@ -132,10 +167,10 @@ int main()
 	scanf("%d", &n);
 	char artigo[256];
 	string pessoa;
-	graph g;
-	initialize_graph(&g);
+	graph * g = new graph;
+	initialize_graph(g);
 	map<string, int> hash;
-	hash.insert(pair<string,int>("Erdos, P.", 0));
+	hash.insert(pair<string,int>("Erdos, P.", 1));
 	for(int i = 0; i < n; i++)
 	{
 		scanf("%d %d", &nArt, &nPes);
@@ -144,18 +179,20 @@ int main()
 		{
 			cin.getline(artigo, 256);
 			string sartigo(artigo);
-			splitg(sartigo, &g, &hash);
+			splitg(sartigo, g, &hash);
 		}
-		dijkstra(&g, 0);
+		for(int j = 0; j < 10; j++)
+			dist[j] = INT_MAX;
+		rec(g, 1, 0);
+		g->nvertices = hash.size();
 		cout << "Scenario " << i+1 << endl;
 		for(int j = 0; j < nPes; j++)
 		{
 			cin.getline(artigo, 256);
 			pessoa = artigo;
-			cout << "# " << pessoa << "#" << endl;
-			map<string,int>::iterator it = hash.find(pessoa);
-			int x = parent[it->second];
 			cout << pessoa << " ";
+			map<string,int>::iterator it = hash.find(pessoa);
+			int x = dist[it->second];
 			if(x == INT_MAX)
 				cout << "infinity" << endl;
 			else
